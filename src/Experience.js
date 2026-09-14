@@ -1,10 +1,10 @@
 import * as THREE from 'three'
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import Time from './utils/Time.js'
 import Physics from './physics/Physics.js'
 import carTuning from './physics/carTuning.js'
 import Controls from './controls/Controls.js'
 import Car from './world/Car.js'
+import ChaseCamera from './ChaseCamera.js'
 
 /**
  * Root of the app: renderer, scene, camera, main loop, resize.
@@ -23,8 +23,9 @@ export default class Experience {
     this.setTestTrack()
 
     this.car = new Car({ scene: this.scene, physics: this.physics, tuning: carTuning })
-    this.car.reset([0, 1, 0], Math.PI)
-    this.controls.addEventListener('reset', () => this.car.reset([0, 1, 0], Math.PI))
+    this.chase = new ChaseCamera({ camera: this.camera, car: this.car, domElement: this.renderer.domElement })
+    this.resetCar([0, 1, 0], Math.PI)
+    this.controls.addEventListener('reset', () => this.resetCar([0, 1, 0], Math.PI))
 
     this.renderer.setAnimationLoop(() => this.tick())
   }
@@ -82,11 +83,13 @@ export default class Experience {
   }
 
   setCamera() {
-    this.camera = new THREE.PerspectiveCamera(40, 1, 0.1, 600)
-    this.camera.position.set(12, 10, 14)
-    this.orbit = new OrbitControls(this.camera, this.renderer.domElement)
-    this.orbit.enableDamping = true
-    this.orbitTarget = new THREE.Vector3()
+    this.camera = new THREE.PerspectiveCamera(42, 1, 0.1, 600)
+  }
+
+  resetCar(position, heading) {
+    this.car.reset(position, heading)
+    this.car.update(0)
+    this.chase.snap()
   }
 
   setResize() {
@@ -113,11 +116,7 @@ export default class Experience {
       mesh.quaternion.copy(body.rotation())
     }
 
-    // Orbit camera drags along with the car
-    const shift = this.orbitTarget.copy(this.car.group.position).sub(this.orbit.target)
-    this.orbit.target.add(shift)
-    this.camera.position.add(shift)
-    this.orbit.update()
+    this.chase.update(delta)
 
     this.renderer.render(this.scene, this.camera)
   }
