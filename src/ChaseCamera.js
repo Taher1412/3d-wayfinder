@@ -13,10 +13,10 @@ export default class ChaseCamera {
     this.car = car
     this.params = {
       distance: 8.5,
-      height: 4.2,
+      height: 3.9,
       speedDistance: 3, // extra distance at top speed
       lookAhead: 4, // units ahead of the car at top speed
-      lookHeight: 0.9,
+      lookHeight: 1.7,
       yawRate: 3, // how fast the camera swings behind the car
       followRate: 8,
       fov: 42,

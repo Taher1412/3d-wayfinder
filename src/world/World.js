@@ -2,6 +2,8 @@ import { landmarks } from '../data/landmarks.js'
 import { regions, spawn } from '../data/regions.js'
 import { compassToYaw } from '../utils/compass.js'
 import Landmark from './Landmark.js'
+import Ground from './Ground.js'
+import Environment from './Environment.js'
 
 const EXIT_MARGIN = 1.5 // leave a zone a bit further out than you enter it, so edges don't flicker
 
@@ -14,6 +16,8 @@ export default class World extends EventTarget {
     super()
     this.scene = scene
     this.physics = physics
+    this.environment = new Environment({ scene })
+    this.ground = new Ground({ scene, physics })
     this.regions = new Map(regions.map((r) => [r.id, r]))
     this.spawn = {
       position: [spawn.position[0], 1.2, spawn.position[2]],

@@ -31,8 +31,8 @@ export const landmarks = [
       title: 'Tour Eiffel',
       eyebrow: 'Paris',
       body: [
-        'Gustave Eiffel’s company built it for the 1889 World’s Fair, and it was only supposed to stand for twenty years. Radio saved it: the top turned out to be the perfect antenna.',
-        'Parisians call it la Dame de fer. Take the stairs to the second floor. It costs less than the lift, and the city opens up one landing at a time.'
+        'Gustave Eiffel’s company built it for the 1889 World’s Fair, and it was only meant to stand for twenty years, until radio saved it: the top made the perfect antenna.',
+        'Parisians call it la Dame de fer. Skip the lift queue and climb to the second floor on foot.'
       ],
       fact: 'Every seven years it is repainted by hand: about 60 tonnes of paint, in a shade officially called “Eiffel Tower Brown”.',
       steps: null,

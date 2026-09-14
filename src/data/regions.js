@@ -30,35 +30,35 @@ export const regions = [
   {
     id: 'nord',
     name: 'Île-de-France & Nord',
-    color: '#e6e9ec',
+    color: '#e9ecee',
     polygon: [N, ardennes, dijon, tours, cotentin],
     decor: { trees: 26 }
   },
   {
     id: 'est',
     name: 'Grand Est & Alpes',
-    color: '#e9e6dc',
+    color: '#eceae5',
     polygon: [ardennes, NE, jura, lyon, dijon],
     decor: { trees: 34 }
   },
   {
     id: 'ouest',
     name: 'Normandie & Bretagne',
-    color: '#e0e7dd',
+    color: '#e4e9e2',
     polygon: [cotentin, tours, vendee, W],
     decor: { trees: 30 }
   },
   {
     id: 'centre-ouest',
     name: 'Nouvelle-Aquitaine',
-    color: '#efe9dd',
+    color: '#f1eee8',
     polygon: [vendee, tours, dijon, lyon, cantal, SW],
     decor: { trees: 36 }
   },
   {
     id: 'sud',
     name: 'Occitanie & Provence',
-    color: '#f0e3d3',
+    color: '#f1e9df',
     polygon: [SW, cantal, lyon, jura, SE, S],
     decor: { trees: 22 }
   }
