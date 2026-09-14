@@ -129,5 +129,32 @@ export const landmarks = [
       ],
       link: { label: 'ANEF: administration-etrangers-en-france', href: 'https://administration-etrangers-en-france.interieur.gouv.fr' }
     }
+  },
+  {
+    id: 'crous-banque',
+    name: 'CROUS & Banque',
+    kind: 'admin',
+    region: 'centre-ouest',
+    position: toWorld(2.35, 45.3),
+    facing: 350,
+    model: 'crous',
+    scale: 1,
+    trigger: { radius: 12 },
+    panel: {
+      title: 'CROUS & bank: money and daily life',
+      eyebrow: 'Démarches',
+      body: null,
+      fact: null,
+      steps: [
+        'Pay the CVEC on cvec.etudiant.gouv.fr and download the attestation.',
+        'Open a bank account: bring your passport, visa, attestation d’hébergement and certificat de scolarité.',
+        'Download your RIB. Your landlord, the CAF and Ameli will all ask for it.',
+        'Join the sécu on etudiant-etranger.ameli.fr to get your numéro de sécurité sociale.',
+        'Apply for APL housing aid on caf.fr with your lease, RIB and validated visa.',
+        'Get a student transport pass: Navigo Imagine R in Paris, your local network’s pass elsewhere.',
+        'Set up Izly to pay for meals in the CROUS restaurants universitaires.'
+      ],
+      link: { label: 'cvec.etudiant.gouv.fr', href: 'https://cvec.etudiant.gouv.fr' }
+    }
   }
 ]
