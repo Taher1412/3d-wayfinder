@@ -1,0 +1,22 @@
+{
+  "name": "bienvenue-en-france",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "A stylized low-poly map of France you explore by driving a small car.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "validate": "node scripts/validate-landmarks.js"
+  },
+  "dependencies": {
+    "@dimforge/rapier3d-compat": "^0.20.0",
+    "howler": "^2.2.4",
+    "lil-gui": "^0.21.0",
+    "three": "^0.186.0"
+  },
+  "devDependencies": {
+    "vite": "^8.3.0"
+  }
+}
