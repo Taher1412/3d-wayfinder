@@ -73,11 +73,32 @@ export default class ModelBuilder {
     return this.add(new THREE.LatheGeometry(profile, options.segments ?? 10), options)
   }
 
-  /** Extrude an [x, y] outline along Z, centred on z = 0. */
+  /** Extrude an [x, y] outline along Z, centred on z = 0. `holes`: list of outlines cut through it. */
   extrude(points, depth, options = {}) {
-    const shape = new THREE.Shape(points.map(([x, y]) => new THREE.Vector2(x, y)))
-    const g = new THREE.ExtrudeGeometry(shape, { depth, bevelEnabled: false }).translate(0, 0, -depth / 2)
+    const toVectors = (list) => list.map(([x, y]) => new THREE.Vector2(x, y))
+    const shape = new THREE.Shape(toVectors(points))
+    for (const hole of options.holes ?? []) shape.holes.push(new THREE.Path(toVectors(hole)))
+    const g = new THREE.ExtrudeGeometry(shape, { depth, bevelEnabled: false, curveSegments: 6 }).translate(0, 0, -depth / 2)
     return this.add(g, options)
+  }
+
+  /** A beam from point `from` to point `to`, tapering between the two radii. 4 segments = square section. */
+  strut(from, to, radiusFrom, radiusTo, options = {}) {
+    const a = new THREE.Vector3(...from)
+    const direction = new THREE.Vector3(...to).sub(a)
+    const length = direction.length()
+    const quaternion = new THREE.Quaternion().setFromUnitVectors(THREE.Object3D.DEFAULT_UP, direction.normalize())
+    const segments = options.segments ?? 4
+    const g = new THREE.CylinderGeometry(radiusTo, radiusFrom, length, segments)
+    if (segments === 4) g.rotateY(Math.PI / 4)
+    g.translate(0, length / 2, 0)
+    const rot = new THREE.Euler().setFromQuaternion(quaternion).toArray().slice(0, 3)
+    return this.add(g, { ...options, at: from, rot })
+  }
+
+  /** Part of a torus in the XY plane, from angle 0 to `angle` (π = a half arch standing on the X axis). */
+  arc(radius, thickness, angle, options = {}) {
+    return this.add(new THREE.TorusGeometry(radius, thickness, options.sides ?? 4, options.segments ?? 10, angle), options)
   }
 
   /** Invisible collision box, e.g. to keep an arch passable or simplify a lattice. */

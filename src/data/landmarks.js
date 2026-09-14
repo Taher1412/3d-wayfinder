@@ -24,7 +24,7 @@ export const landmarks = [
     region: 'nord',
     position: toWorld(2.2945, 48.8584),
     facing: 180,
-    model: 'placeholder',
+    model: 'eiffel',
     scale: 1,
     trigger: { radius: 10 },
     panel: {
