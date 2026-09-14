@@ -40,6 +40,28 @@ export const landmarks = [
     }
   },
   {
+    id: 'mont-saint-michel',
+    name: 'Mont-Saint-Michel',
+    kind: 'monument',
+    region: 'ouest',
+    position: toWorld(-1.5115, 48.6361),
+    facing: 140,
+    model: 'montSaintMichel',
+    scale: 1,
+    trigger: { radius: 14 },
+    panel: {
+      title: 'Mont-Saint-Michel',
+      eyebrow: 'Normandie',
+      body: [
+        'A Benedictine abbey stacked on a granite island, built up over eight centuries until village, ramparts and church read as one single rock.',
+        'Since 2014 a light footbridge has replaced the old causeway, so the tide can surround the island again.'
+      ],
+      fact: 'The bay has some of the biggest tides in Europe: at spring tides the sea level swings by more than 13 metres.',
+      steps: null,
+      link: { label: 'abbaye-mont-saint-michel.fr', href: 'https://www.abbaye-mont-saint-michel.fr' }
+    }
+  },
+  {
     id: 'prefecture',
     name: 'Préfecture',
     kind: 'admin',

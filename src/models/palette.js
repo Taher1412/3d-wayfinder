@@ -10,6 +10,7 @@ export const palette = {
   paper: '#f3efe7',
   linen: '#e7e0d3',
   stone: '#d6cdbd',
+  sand: '#e2d4b6',
   sandstone: '#d9bd8f',
   sandstoneDeep: '#bf9d6c',
   granite: '#a39f98',
