@@ -40,6 +40,7 @@ export default class Experience {
     this.setSound()
     this.setLandmarkFlow()
     this.resetCar(this.world.spawn)
+    this.setDebug()
 
     this.firstFrame = new Promise((resolve) => (this.resolveFirstFrame = resolve))
     this.renderer.setAnimationLoop(() => this.tick())
@@ -96,6 +97,17 @@ export default class Experience {
     this.controls.addEventListener('mute', () => this.sound.toggleMute())
     this.hud.addEventListener('mute', () => this.sound.toggleMute())
     sync()
+  }
+
+  /** lil-gui only loads when the URL has #debug. */
+  setDebug() {
+    const load = async () => {
+      if (location.hash !== '#debug' || this.debug) return
+      const { default: Debug } = await import('./debug/Debug.js')
+      this.debug ??= new Debug(this)
+    }
+    window.addEventListener('hashchange', load)
+    load()
   }
 
   /** Zones open panels; closing one keeps it shut until the car leaves; R returns to the last zone. */
@@ -183,11 +195,12 @@ export default class Experience {
     Object.assign(this.car.vehicle.input, input)
     this.physics.update(delta)
     this.car.update(delta)
-    this.chase.update(delta)
+    if (!this.debug?.orbit.enabled) this.chase.update(delta)
     this.sound.update(delta, Math.min(1, Math.abs(this.car.vehicle.forwardSpeed) / carTuning.topSpeed), input.throttle)
     this.world.update(delta, this.car.group.position, this.camera)
     this.hud.update(delta, { driving: input.throttle !== 0 || input.steer !== 0, pointer: this.compassTarget() })
 
+    this.debug?.update(this.time.raw)
     this.renderer.render(this.scene, this.camera)
     this.updateQuality()
 

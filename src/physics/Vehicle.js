@@ -187,6 +187,17 @@ export default class Vehicle {
     current.quaternion.splice(0, 4, q.x, q.y, q.z, q.w)
   }
 
+  /** Recreate body, collider and wheels from the current tuning, keeping the car where it is. */
+  rebuild() {
+    const { world } = this.physics
+    const p = this.body.translation()
+    const heading = this.heading
+    world.removeVehicleController(this.controller)
+    world.removeRigidBody(this.body)
+    this.create()
+    this.reset([p.x, p.y + 0.5, p.z], heading)
+  }
+
   /** Teleport upright, facing `heading` (radians around +Y). */
   reset(position, heading = 0) {
     const body = this.body
