@@ -27,3 +27,6 @@ export function toWorld(lon, lat) {
 export function between(a, b, t) {
   return [round(a[0] + (b[0] - a[0]) * t), round(a[1] + (b[1] - a[1]) * t)]
 }
+
+/** Roughly how many real kilometres one world unit stands for. */
+export const KM_PER_UNIT = 111.32 / SCALE

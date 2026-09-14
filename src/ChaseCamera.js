@@ -64,8 +64,10 @@ export default class ChaseCamera {
   computeDesired(position, look) {
     const p = this.params
     const car = this.car.group.position
-    const distance = (p.distance + p.speedDistance * this.speed01) * this.zoom
-    const height = p.height * this.zoom
+    // Portrait screens see less sideways, so back off a little
+    const framing = this.zoom * (1 + Math.max(0, 1 - this.camera.aspect) * 0.7)
+    const distance = (p.distance + p.speedDistance * this.speed01) * framing
+    const height = p.height * framing
     position.set(car.x - Math.sin(this.yaw) * distance, car.y + height, car.z - Math.cos(this.yaw) * distance)
 
     const heading = this.car.vehicle.heading

@@ -12,7 +12,8 @@ export default class Time {
 
   update() {
     const now = performance.now()
-    this.delta = Math.min((now - this.current) / 1000, 1 / 20)
+    this.raw = (now - this.current) / 1000
+    this.delta = Math.min(this.raw, 1 / 20)
     this.elapsed = (now - this.start) / 1000
     this.current = now
   }

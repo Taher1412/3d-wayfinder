@@ -266,3 +266,314 @@ body {
     font-size: 22px;
   }
 }
+
+/* HUD -------------------------------------------------------------------- */
+
+.hud {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.hud > * {
+  pointer-events: auto;
+}
+
+.hud__brand {
+  position: absolute;
+  top: max(16px, env(safe-area-inset-top));
+  left: max(18px, env(safe-area-inset-left));
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--serif);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--ink);
+  pointer-events: none;
+}
+
+.hud__flag {
+  display: flex;
+  width: 24px;
+  height: 16px;
+  border-radius: 3px;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px var(--line);
+}
+
+.hud__flag i {
+  flex: 1;
+}
+
+.hud__flag i:nth-child(1) {
+  background: var(--blue);
+}
+
+.hud__flag i:nth-child(2) {
+  background: var(--paper);
+}
+
+.hud__flag i:nth-child(3) {
+  background: var(--red);
+}
+
+.hud__compass {
+  position: absolute;
+  top: max(14px, env(safe-area-inset-top));
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px 7px 9px;
+  border-radius: 999px;
+  background: rgba(250, 248, 243, 0.9);
+  box-shadow: var(--shadow);
+  font-size: 14px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.hud__compass[hidden] {
+  display: none;
+}
+
+.hud__arrow {
+  width: 22px;
+  height: 22px;
+  fill: var(--blue);
+  transition: transform 0.12s linear;
+}
+
+.hud__target {
+  font-weight: 600;
+}
+
+.hud__distance {
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.hud__actions {
+  position: absolute;
+  right: max(16px, env(safe-area-inset-right));
+  bottom: max(16px, env(safe-area-inset-bottom));
+  display: flex;
+  gap: 8px;
+  transition: opacity 0.2s;
+}
+
+/* On touch the pedals own the bottom-right, so the buttons go up top and step aside for the panel */
+.hud.is-touch .hud__actions {
+  top: max(12px, env(safe-area-inset-top));
+  bottom: auto;
+}
+
+.panel.is-open ~ .hud.is-touch .hud__actions {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.hud__button {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(250, 248, 243, 0.9);
+  box-shadow: var(--shadow);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.hud__button:hover,
+.hud__button:focus-visible {
+  background: var(--paper);
+}
+
+.hud__button svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.hud__hint {
+  position: absolute;
+  left: max(16px, env(safe-area-inset-left));
+  bottom: max(16px, env(safe-area-inset-bottom));
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  max-width: calc(100vw - 32px);
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: rgba(250, 248, 243, 0.88);
+  box-shadow: var(--shadow);
+  font-size: 13px;
+  color: var(--ink-soft);
+  transition: opacity 0.6s, transform 0.6s;
+  pointer-events: none;
+}
+
+.hud__hint.is-hidden {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.hud__hint kbd {
+  display: inline-block;
+  min-width: 1.5em;
+  margin-right: 3px;
+  padding: 1px 5px;
+  border: 1px solid var(--line);
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  background: var(--paper);
+  font: 600 12px/1.4 var(--sans);
+  color: var(--ink);
+  text-align: center;
+}
+
+.hud.is-touch .hud__hint {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .hud__brand {
+    display: none;
+  }
+
+  .hud__compass {
+    top: auto;
+    bottom: calc(max(16px, env(safe-area-inset-bottom)) + 150px);
+  }
+
+  .panel.is-open ~ .hud .hud__compass {
+    opacity: 0;
+  }
+}
+
+/* Touch controls ---------------------------------------------------------- */
+
+.touch {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 190px;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.touch[hidden] {
+  display: none;
+}
+
+.touch__stick-zone {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 55%;
+  height: 100%;
+  touch-action: none;
+  pointer-events: auto;
+}
+
+.touch__stick {
+  position: absolute;
+  left: calc(max(20px, env(safe-area-inset-left)) + 64px);
+  top: calc(100% - max(20px, env(safe-area-inset-bottom)) - 64px);
+  width: 128px;
+  height: 128px;
+  margin: -64px 0 0 -64px;
+  border-radius: 50%;
+  background: rgba(250, 248, 243, 0.55);
+  box-shadow: inset 0 0 0 2px rgba(47, 52, 64, 0.1);
+}
+
+.touch__stick.is-active {
+  background: rgba(250, 248, 243, 0.75);
+}
+
+.touch__knob {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 56px;
+  height: 56px;
+  margin: -28px 0 0 -28px;
+  border-radius: 50%;
+  background: var(--paper);
+  box-shadow: var(--shadow);
+}
+
+.touch__pedals {
+  position: absolute;
+  right: max(20px, env(safe-area-inset-right));
+  bottom: max(20px, env(safe-area-inset-bottom));
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  pointer-events: auto;
+}
+
+.touch__pedal {
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: var(--paper);
+  box-shadow: var(--shadow);
+  color: var(--ink);
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.08s, background 0.08s;
+}
+
+.touch__pedal svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.touch__pedal--gas {
+  width: 84px;
+  height: 118px;
+  border-radius: 26px;
+  background: var(--blue);
+  color: var(--paper);
+}
+
+.touch__pedal--gas svg {
+  width: 40px;
+  height: 40px;
+}
+
+.touch__pedal--reverse {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+}
+
+.touch__pedal--reverse svg {
+  width: 28px;
+  height: 28px;
+}
+
+.touch__pedal.is-pressed {
+  transform: scale(0.94);
+}
+
+.touch__pedal--reverse.is-pressed {
+  background: var(--red);
+  color: var(--paper);
+}
