@@ -84,6 +84,28 @@ export const landmarks = [
     }
   },
   {
+    id: 'limoges',
+    name: 'Limoges',
+    kind: 'monument',
+    region: 'centre-ouest',
+    position: toWorld(1.2611, 45.8336),
+    facing: 55,
+    model: 'limoges',
+    scale: 1,
+    trigger: { radius: 12 },
+    panel: {
+      title: 'Limoges: cathedral & porcelain',
+      eyebrow: 'Haute-Vienne',
+      body: [
+        'Limoges has made fine porcelain since the 1770s, soon after kaolin, the white clay it needs, was found nearby at Saint-Yrieix.',
+        'The Cathédrale Saint-Étienne took more than six centuries to finish: its bell tower still stands on a Romanesque base older than the Gothic nave.'
+      ],
+      fact: 'Since 2017, “Porcelaine de Limoges” has been a protected geographical indication. Like a regional cheese, it has to be made here.',
+      steps: null,
+      link: { label: 'limoges.fr', href: 'https://www.limoges.fr' }
+    }
+  },
+  {
     id: 'prefecture',
     name: 'Préfecture',
     kind: 'admin',

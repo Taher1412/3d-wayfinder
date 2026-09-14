@@ -55,8 +55,9 @@ export default class ModelBuilder {
     return g
   }
 
+  /** `open: true` leaves the caps off (bands, rims, tubes). */
   cylinder(radiusTop, radiusBottom, height, options = {}) {
-    return this.add(new THREE.CylinderGeometry(radiusTop, radiusBottom, height, options.segments ?? 8), options)
+    return this.add(new THREE.CylinderGeometry(radiusTop, radiusBottom, height, options.segments ?? 8, 1, options.open ?? false), options)
   }
 
   cone(radius, height, options = {}) {

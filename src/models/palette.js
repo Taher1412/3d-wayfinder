@@ -35,6 +35,10 @@ export const palette = {
   bark: '#8a6e55',
   water: '#a9bdcc',
 
+  // Porcelain
+  porcelain: '#fbfaf6',
+  porcelainBlue: '#35589a',
+
   // Metal
   bronze: '#7d6552',
   gold: '#c9a45c'
