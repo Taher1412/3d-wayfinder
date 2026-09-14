@@ -65,4 +65,4 @@ export const regions = [
 ]
 
 /** Where the car starts: east of Limoges, facing Paris. Heading in compass degrees (0 = north). */
-export const spawn = { position: toWorld(2.1, 46.2), heading: 0 }
+export const spawn = { position: toWorld(2.3, 46.3), heading: 0 }
