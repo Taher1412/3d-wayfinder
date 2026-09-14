@@ -9,6 +9,7 @@ import ChaseCamera from './ChaseCamera.js'
 import World from './world/World.js'
 import Panel from './ui/Panel.js'
 import Hud from './ui/Hud.js'
+import Sound from './audio/Sound.js'
 import { KM_PER_UNIT } from './data/geo.js'
 
 const coarsePointer = window.matchMedia('(pointer: coarse)')
@@ -36,6 +37,7 @@ export default class Experience {
     this.panel = new Panel(this.ui)
     this.hud = new Hud(this.ui, { touch: coarsePointer.matches })
     this.setTouch()
+    this.setSound()
     this.setLandmarkFlow()
     this.resetCar(this.world.spawn)
 
@@ -87,6 +89,15 @@ export default class Experience {
     apply()
   }
 
+  setSound() {
+    this.sound = new Sound()
+    const sync = () => this.hud.setMuted(this.sound.muted)
+    this.sound.addEventListener('change', sync)
+    this.controls.addEventListener('mute', () => this.sound.toggleMute())
+    this.hud.addEventListener('mute', () => this.sound.toggleMute())
+    sync()
+  }
+
   /** Zones open panels; closing one keeps it shut until the car leaves; R returns to the last zone. */
   setLandmarkFlow() {
     const { world, panel, controls, hud } = this
@@ -98,17 +109,26 @@ export default class Experience {
       landmark.setActive(true)
       this.lastLandmark = landmark
       this.visited.add(landmark.id)
-      if (this.dismissed !== landmark) panel.show(landmark, world.regions.get(landmark.data.region)?.name ?? '')
+      if (this.dismissed !== landmark) {
+        panel.show(landmark, world.regions.get(landmark.data.region)?.name ?? '')
+        this.sound.play('chime')
+      }
     })
     world.addEventListener('leave', ({ detail: landmark }) => {
       landmark.setActive(false)
       if (panel.landmark === landmark) panel.hide()
       if (this.dismissed === landmark) this.dismissed = null
     })
-    panel.addEventListener('close', ({ detail: landmark }) => (this.dismissed = landmark))
+    panel.addEventListener('close', ({ detail: landmark }) => {
+      this.dismissed = landmark
+      this.sound.play('click')
+    })
     controls.addEventListener('close', () => panel.close())
 
-    const reset = () => this.resetCar(this.lastLandmark?.respawn ?? world.spawn)
+    const reset = () => {
+      this.resetCar(this.lastLandmark?.respawn ?? world.spawn)
+      this.sound.play('click')
+    }
     controls.addEventListener('reset', reset)
     hud.addEventListener('reset', reset)
   }
@@ -164,6 +184,7 @@ export default class Experience {
     this.physics.update(delta)
     this.car.update(delta)
     this.chase.update(delta)
+    this.sound.update(delta, Math.min(1, Math.abs(this.car.vehicle.forwardSpeed) / carTuning.topSpeed), input.throttle)
     this.world.update(delta, this.car.group.position, this.camera)
     this.hud.update(delta, { driving: input.throttle !== 0 || input.steer !== 0, pointer: this.compassTarget() })
 
