@@ -1,5 +1,8 @@
 import * as THREE from 'three'
 import Vehicle from '../physics/Vehicle.js'
+import { buildCarBody, buildWheel } from '../models/car.js'
+import { flatMaterial } from '../models/palette.js'
+import { createContactShadow } from './contactShadow.js'
 
 const _v = new THREE.Vector3()
 const _q = new THREE.Quaternion()
@@ -24,34 +27,24 @@ export default class Car {
     this.lastForwardSpeed = 0
     this.lastHeading = 0
 
-    this.setMeshes()
+    this.setMeshes(scene)
   }
 
-  setMeshes() {
-    const t = this.tuning
-    const [hx, hy, hz] = t.chassisHalfExtents
-    const chassis = new THREE.Mesh(
-      new THREE.BoxGeometry(hx * 2, hy * 2, hz * 2),
-      new THREE.MeshStandardMaterial({ color: '#4a6fa5', flatShading: true })
-    )
-    chassis.position.y = t.chassisOffsetY
-    this.body.add(chassis)
+  setMeshes(scene) {
+    this.body.add(new THREE.Mesh(buildCarBody(this.tuning), flatMaterial))
 
-    const wheelGeometry = new THREE.CylinderGeometry(t.wheelRadius, t.wheelRadius, 0.22, 12).rotateZ(Math.PI / 2)
-    const wheelMaterial = new THREE.MeshStandardMaterial({ color: '#2f3136', flatShading: true })
-    const capGeometry = new THREE.BoxGeometry(0.24, 0.12, 0.12)
-    const capMaterial = new THREE.MeshStandardMaterial({ color: '#f4f1ea' })
+    const wheelGeometry = buildWheel(this.tuning)
     this.wheels = []
     for (let i = 0; i < 4; i++) {
       const steer = new THREE.Group() // yaw
-      const spin = new THREE.Mesh(wheelGeometry, wheelMaterial) // roll
-      const cap = new THREE.Mesh(capGeometry, capMaterial)
-      cap.position.y = t.wheelRadius * 0.55
-      spin.add(cap)
+      const spin = new THREE.Mesh(wheelGeometry, flatMaterial) // roll
       steer.add(spin)
       this.group.add(steer)
       this.wheels.push({ steer, spin })
     }
+
+    this.shadow = createContactShadow(2.2, 3.4, 0.45)
+    scene.add(this.shadow)
   }
 
   update(delta) {
@@ -75,6 +68,18 @@ export default class Car {
     }
 
     this.updateLean(delta)
+    this.updateShadow()
+  }
+
+  /** Blob under the car: follows it on the ground, fades and spreads as it leaves the ground. */
+  updateShadow() {
+    const { position } = this.group
+    const height = Math.max(0, position.y - 0.53)
+    const spread = 1 + height * 0.25
+    this.shadow.position.set(position.x, 0.02, position.z)
+    this.shadow.rotation.y = this.vehicle.heading
+    this.shadow.scale.set(2.2 * spread, 1, 3.4 * spread)
+    this.shadow.material.opacity = 0.45 * Math.max(0, 1 - height / 5)
   }
 
   /** Spring the body against longitudinal and lateral acceleration. */

@@ -39,6 +39,8 @@ export const palette = {
   porcelain: '#fbfaf6',
   porcelainBlue: '#35589a',
 
+  glass: '#bdcad6',
+
   // Metal
   bronze: '#7d6552',
   gold: '#c9a45c'
