@@ -60,6 +60,19 @@ export default class ModelBuilder {
     return this.add(new THREE.CylinderGeometry(radiusTop, radiusBottom, height, options.segments ?? 8, 1, options.open ?? false), options)
   }
 
+  /** A box whose top face is scaled to `topWidth` × `topDepth`: mansard roofs, plinths, pyramids (top 0). */
+  frustum(width, depth, topWidth, topDepth, height, options = {}) {
+    const g = new THREE.BoxGeometry(width, height, depth)
+    const position = g.attributes.position
+    for (let i = 0; i < position.count; i++) {
+      if (position.getY(i) > 0) {
+        position.setX(i, (position.getX(i) * topWidth) / width)
+        position.setZ(i, (position.getZ(i) * topDepth) / depth)
+      }
+    }
+    return this.add(g, options)
+  }
+
   cone(radius, height, options = {}) {
     return this.add(new THREE.ConeGeometry(radius, height, options.segments ?? 8), options)
   }
