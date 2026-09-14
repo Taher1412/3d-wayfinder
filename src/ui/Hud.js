@@ -47,15 +47,31 @@ export default class Hud extends EventTarget {
     this.hint = document.createElement('div')
     this.hint.className = 'hud__hint'
     this.hint.innerHTML = `
-      <span><kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd> or <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> drive</span>
+      <span><kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd> or <kbd data-code="KeyW">W</kbd><kbd data-code="KeyA">A</kbd><kbd data-code="KeyS">S</kbd><kbd data-code="KeyD">D</kbd> drive</span>
       <span><kbd>Space</kbd> handbrake</span>
       <span><kbd>R</kbd> back to last landmark</span>
       <span><kbd>M</kbd> sound</span>`
+
+    this.localiseKeys()
 
     this.root.append(brand, this.compass, actions, this.hint)
     root.append(this.root)
     this.setTouch(touch)
     this.drivenTime = 0
+  }
+
+  /** Controls bind physical keys, so show what those keys say on this keyboard (ZQSD on AZERTY). Chromium only; WASD otherwise. */
+  async localiseKeys() {
+    try {
+      const layout = await navigator.keyboard?.getLayoutMap?.()
+      if (!layout) return
+      for (const kbd of this.hint.querySelectorAll('kbd[data-code]')) {
+        const label = layout.get(kbd.dataset.code)
+        if (label) kbd.textContent = label.toUpperCase()
+      }
+    } catch {
+      // not allowed in this context: keep the QWERTY labels
+    }
   }
 
   setTouch(touch) {

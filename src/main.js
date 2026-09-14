@@ -20,6 +20,7 @@ try {
 
   experience.renderer.domElement.addEventListener('webglcontextlost', () => loader.fail('The 3D context was lost. Reload the page to drive again.'))
   await experience.firstFrame
+  performance.mark('bienvenue:ready') // time to a drivable first frame, visible in DevTools > Performance
   loader.done()
 } catch (error) {
   console.error(error)
