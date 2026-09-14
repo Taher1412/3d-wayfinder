@@ -30,6 +30,7 @@ export const palette = {
   leaf: '#94b183',
   leafDeep: '#6e8f62',
   cypress: '#4f6b4a',
+  olive: '#a2ab8a',
   lavender: '#9d8dc6',
   lavenderDeep: '#7a6aa8',
   bark: '#8a6e55',

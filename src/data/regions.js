@@ -4,6 +4,8 @@ import { toMap, toWorld, between } from './geo.js'
  * The map: France as l'Hexagone, split into a few zones by floor colour.
  * Polygons are [x, z] map points and must tile the outline without overlapping
  * (npm run validate checks this).
+ *
+ * decor: { trees, kinds } scatters that many trees of those kinds (see world/Decor.js)
  */
 
 // The six corners of the hexagon
@@ -32,35 +34,35 @@ export const regions = [
     name: 'Île-de-France & Nord',
     color: '#e9ecee',
     polygon: [N, ardennes, dijon, tours, cotentin],
-    decor: { trees: 26 }
+    decor: { trees: 26, kinds: ['round', 'round', 'fir'] }
   },
   {
     id: 'est',
     name: 'Grand Est & Alpes',
     color: '#eceae5',
     polygon: [ardennes, NE, jura, lyon, dijon],
-    decor: { trees: 34 }
+    decor: { trees: 34, kinds: ['fir', 'fir', 'round'] }
   },
   {
     id: 'ouest',
     name: 'Normandie & Bretagne',
     color: '#e4e9e2',
     polygon: [cotentin, tours, vendee, W],
-    decor: { trees: 30 }
+    decor: { trees: 30, kinds: ['round'] }
   },
   {
     id: 'centre-ouest',
     name: 'Nouvelle-Aquitaine',
     color: '#f1eee8',
     polygon: [vendee, tours, dijon, lyon, cantal, SW],
-    decor: { trees: 36 }
+    decor: { trees: 36, kinds: ['round', 'round', 'fir'] }
   },
   {
     id: 'sud',
     name: 'Occitanie & Provence',
     color: '#f1e9df',
     polygon: [SW, cantal, lyon, jura, SE, S],
-    decor: { trees: 22 }
+    decor: { trees: 24, kinds: ['cypress', 'olive', 'olive'] }
   }
 ]
 

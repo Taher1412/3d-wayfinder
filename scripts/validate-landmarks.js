@@ -6,6 +6,8 @@ import { existsSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { landmarks } from '../src/data/landmarks.js'
 import { outline, regions, spawn } from '../src/data/regions.js'
+import { props } from '../src/data/props.js'
+import { pointInPolygon, distanceToEdges, polygonArea } from '../src/utils/polygon.js'
 
 const modelsDir = fileURLToPath(new URL('../src/models/landmarks/', import.meta.url))
 const errors = []
@@ -18,25 +20,9 @@ const KNOWN_PANEL = ['title', 'eyebrow', 'body', 'fact', 'steps', 'link']
 const isText = (v) => typeof v === 'string' && v.trim().length > 0
 const isNumber = (v) => typeof v === 'number' && Number.isFinite(v)
 
-// Geometry helpers on [x, z] points
-const area = (poly) => Math.abs(poly.reduce((s, [x1, z1], i) => {
-  const [x2, z2] = poly[(i + 1) % poly.length]
-  return s + x1 * z2 - x2 * z1
-}, 0)) / 2
-const inside = ([x, z], poly) => {
-  let hit = false
-  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
-    const [xi, zi] = poly[i], [xj, zj] = poly[j]
-    if (zi > z !== zj > z && x < ((xj - xi) * (z - zi)) / (zj - zi) + xi) hit = !hit
-  }
-  return hit
-}
-const edgeDistance = ([x, z], poly) => Math.min(...poly.map(([ax, az], i) => {
-  const [bx, bz] = poly[(i + 1) % poly.length]
-  const dx = bx - ax, dz = bz - az
-  const t = Math.max(0, Math.min(1, ((x - ax) * dx + (z - az) * dz) / (dx * dx + dz * dz)))
-  return Math.hypot(x - (ax + t * dx), z - (az + t * dz))
-}))
+const area = polygonArea
+const inside = pointInPolygon
+const edgeDistance = distanceToEdges
 
 // Regions ---------------------------------------------------------------------
 const regionIds = new Set()
@@ -137,6 +123,16 @@ for (const l of valid) {
   if (Math.hypot(s[0] - l.position[0], s[1] - l.position[2]) < l.trigger.radius + 3) fail('spawn', `starts inside the "${l.id}" zone`)
 }
 
+// Props -----------------------------------------------------------------------
+const PROP_TYPES = ['cone', 'crate', 'hay']
+for (const [i, p] of props.entries()) {
+  const where = `props[${i}] ${p.type}`
+  if (!PROP_TYPES.includes(p.type)) fail(where, `type must be one of ${PROP_TYPES.join(', ')}`)
+  if (!['line', 'pyramid', 'scatter'].includes(p.layout)) fail(where, 'layout must be line, pyramid or scatter')
+  if (!(Number.isInteger(p.count) && p.count > 0)) fail(where, 'count must be a positive integer')
+  if (!Array.isArray(p.position) || !inside([p.position[0], p.position[2]], outline)) fail(where, 'position is outside the map')
+}
+
 // Report ----------------------------------------------------------------------
 for (const w of warnings) console.warn(`⚠ ${w}`)
 if (errors.length) {
@@ -144,4 +140,4 @@ if (errors.length) {
   console.error(`\n${errors.length} problem${errors.length > 1 ? 's' : ''} in the map data.`)
   process.exit(1)
 }
-console.log(`✓ ${landmarks.length} landmarks, ${regions.length} regions: all good.`)
+console.log(`✓ ${landmarks.length} landmarks, ${regions.length} regions, ${props.length} prop groups: all good.`)

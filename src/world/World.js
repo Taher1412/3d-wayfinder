@@ -4,6 +4,8 @@ import { compassToYaw } from '../utils/compass.js'
 import Landmark from './Landmark.js'
 import Ground from './Ground.js'
 import Environment from './Environment.js'
+import Decor from './Decor.js'
+import Props from './Props.js'
 
 const EXIT_MARGIN = 1.5 // leave a zone a bit further out than you enter it, so edges don't flicker
 
@@ -24,11 +26,14 @@ export default class World extends EventTarget {
       heading: compassToYaw(spawn.heading ?? 0)
     }
     this.landmarks = landmarks.map((data) => new Landmark({ data, scene, physics }))
+    this.decor = new Decor({ scene, physics })
+    this.props = new Props({ scene, physics })
     this.current = null
   }
 
   update(dt, carPosition, camera) {
     const { x, z } = carPosition
+    this.props.update()
     let inside = null
     let best = Infinity
     for (const landmark of this.landmarks) {
