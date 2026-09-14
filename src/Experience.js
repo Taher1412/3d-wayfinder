@@ -5,6 +5,8 @@ import carTuning from './physics/carTuning.js'
 import Controls from './controls/Controls.js'
 import Car from './world/Car.js'
 import ChaseCamera from './ChaseCamera.js'
+import World from './world/World.js'
+import Panel from './ui/Panel.js'
 
 /**
  * Root of the app: renderer, scene, camera, main loop, resize.
@@ -22,10 +24,12 @@ export default class Experience {
     this.setResize()
     this.setTestTrack()
 
+    this.world = new World({ scene: this.scene, physics: this.physics })
     this.car = new Car({ scene: this.scene, physics: this.physics, tuning: carTuning })
     this.chase = new ChaseCamera({ camera: this.camera, car: this.car, domElement: this.renderer.domElement })
-    this.resetCar([0, 1, 0], Math.PI)
-    this.controls.addEventListener('reset', () => this.resetCar([0, 1, 0], Math.PI))
+    this.panel = new Panel(document.querySelector('#ui'))
+    this.setLandmarkFlow()
+    this.resetCar(this.world.spawn)
 
     this.renderer.setAnimationLoop(() => this.tick())
   }
@@ -86,7 +90,28 @@ export default class Experience {
     this.camera = new THREE.PerspectiveCamera(42, 1, 0.1, 600)
   }
 
-  resetCar(position, heading) {
+  /** Zones open panels; closing one keeps it shut until the car leaves; R returns to the last zone. */
+  setLandmarkFlow() {
+    const { world, panel, controls } = this
+    this.lastLandmark = null
+    this.dismissed = null
+
+    world.addEventListener('enter', ({ detail: landmark }) => {
+      landmark.setActive(true)
+      this.lastLandmark = landmark
+      if (this.dismissed !== landmark) panel.show(landmark, world.regions.get(landmark.data.region)?.name ?? '')
+    })
+    world.addEventListener('leave', ({ detail: landmark }) => {
+      landmark.setActive(false)
+      if (panel.landmark === landmark) panel.hide()
+      if (this.dismissed === landmark) this.dismissed = null
+    })
+    panel.addEventListener('close', ({ detail: landmark }) => (this.dismissed = landmark))
+    controls.addEventListener('close', () => panel.close())
+    controls.addEventListener('reset', () => this.resetCar(this.lastLandmark?.respawn ?? world.spawn))
+  }
+
+  resetCar({ position, heading }) {
     this.car.reset(position, heading)
     this.car.update(0)
     this.chase.snap()
@@ -117,6 +142,7 @@ export default class Experience {
     }
 
     this.chase.update(delta)
+    this.world.update(delta, this.car.group.position, this.camera)
 
     this.renderer.render(this.scene, this.camera)
   }

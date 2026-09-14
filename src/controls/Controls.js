@@ -21,7 +21,10 @@ export default class Controls extends EventTarget {
     this.state = { throttle: 0, steer: 0, handbrake: false }
 
     window.addEventListener('keydown', (event) => {
-      if (event.target.closest?.('input, textarea, [contenteditable]')) return
+      const target = event.target
+      if (target.closest?.('textarea, select, [contenteditable], input:not([type="checkbox"])')) return
+      // Space/Enter on a focused button, link or checkbox should press it, not the handbrake
+      if ((event.code === 'Space' || event.code === 'Enter') && target.closest?.('button, a, input')) return
       const binding = BINDINGS[event.code]
       if (binding) {
         this.keys.add(binding)
