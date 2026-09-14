@@ -62,6 +62,28 @@ export const landmarks = [
     }
   },
   {
+    id: 'pont-du-gard',
+    name: 'Pont du Gard',
+    kind: 'monument',
+    region: 'sud',
+    position: toWorld(4.5353, 43.9475),
+    facing: 325,
+    model: 'pontDuGard',
+    scale: 1,
+    trigger: { radius: 14 },
+    panel: {
+      title: 'Pont du Gard & the lavender fields',
+      eyebrow: 'Gard & Provence',
+      body: [
+        'Roman engineers built this three-tier aqueduct about 2,000 years ago to carry water 50 km to Nîmes, dropping only around 25 cm per kilometre on the way.',
+        'Further east, the lavender fields of Provence flower from mid-June to late July, just before the harvest.'
+      ],
+      fact: 'Its arches were built without mortar: the blocks, some weighing around six tonnes, simply hold each other up.',
+      steps: null,
+      link: { label: 'pontdugard.fr', href: 'https://www.pontdugard.fr' }
+    }
+  },
+  {
     id: 'prefecture',
     name: 'Préfecture',
     kind: 'admin',
