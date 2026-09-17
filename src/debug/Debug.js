@@ -25,7 +25,7 @@ const RANGES = {
 export default class Debug {
   constructor(experience) {
     this.experience = experience
-    this.gui = new GUI({ title: 'Bienvenue en France · debug' })
+    this.gui = new GUI({ title: '3D Wayfinder · debug' })
     Object.assign(this.gui.domElement.style, { left: '12px', right: 'auto', top: '56px' }) // the info panel owns the right side
     this.stats = { fps: 0, calls: 0, triangles: 0, pixelRatio: 0 }
     this.frames = 0

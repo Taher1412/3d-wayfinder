@@ -1,6 +1,6 @@
-# Bienvenue en France
+# 3D Wayfinder
 
-A small car on a low-poly map of France. Drive up to a landmark and a panel opens. Monuments get a short cultural note and a fun fact. Admin buildings (Préfecture, CROUS & bank) get the step-by-step checklist a newly arrived international student actually has to work through.
+*Bienvenue en France.* A small car on a low-poly map of France. Drive up to a landmark and a panel opens. Monuments get a short cultural note and a fun fact. Admin buildings (Préfecture, CROUS & bank) get the step-by-step checklist a newly arrived international student actually has to work through.
 
 Three.js (WebGL), Rapier physics, Vite, vanilla JS. Howler for sound, lil-gui for the debug panel. Every model is built from primitives in code: no downloaded assets.
 
@@ -9,6 +9,8 @@ Three.js (WebGL), Rapier physics, Vite, vanilla JS. Howler for sound, lil-gui fo
 Needs Node 20+.
 
 ```sh
+git clone https://github.com/Taher1412/3d-wayfinder.git
+cd 3d-wayfinder
 npm install
 npm run dev          # http://localhost:5173
 ```
@@ -154,6 +156,6 @@ It reports:
   - **Load**: the loader is plain HTML, so first paint doesn't wait for any JS. On localhost it paints in about 0.1 s. Under throttled Fast 3G it paints in 0.4 s and is drivable in about 7.6 s, most of that the Rapier download.
   - **Scene**: about 24 draw calls and 14k triangles.
   - **Adapting**: pixel ratio steps down if frames stay under 45 fps; phones get no MSAA and a lower ratio cap.
-  - `performance.mark('bienvenue:ready')` marks the first drivable frame.
+  - `performance.mark('wayfinder:ready')` marks the first drivable frame.
 - **Credit.** The interaction model (drive a physics car around an open world, no menus) is inspired by [Bruno Simon's folio-2019](https://github.com/brunosimon/folio-2019) (MIT). Its source was read for architecture and physics-tuning ideas. The art, models, sounds and text here are original.
 - **Admin steps** reflect procedures and sites as of 2026 (ANEF, CVEC, Ameli, CAF). They change, so check the official links before relying on them.

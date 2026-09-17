@@ -1,4 +1,4 @@
-const STORAGE_PREFIX = 'bienvenue:steps:'
+const STORAGE_PREFIX = 'wayfinder:steps:'
 
 const load = (id) => {
   try {

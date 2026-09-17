@@ -1,7 +1,7 @@
 import { Howl, Howler } from 'howler'
 
 const SAMPLE_RATE = 22050
-const STORAGE_KEY = 'bienvenue:muted'
+const STORAGE_KEY = 'wayfinder:muted'
 
 /** Encode mono samples (-1..1) as a 16-bit PCM WAV blob URL. */
 function wav(samples) {

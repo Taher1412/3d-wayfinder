@@ -26,7 +26,7 @@ export default class Hud extends EventTarget {
 
     const brand = document.createElement('div')
     brand.className = 'hud__brand'
-    brand.innerHTML = '<span class="hud__flag" aria-hidden="true"><i></i><i></i><i></i></span>Bienvenue en France'
+    brand.innerHTML = '<span class="hud__flag" aria-hidden="true"><i></i><i></i><i></i></span>3D Wayfinder'
 
     this.compass = document.createElement('div')
     this.compass.className = 'hud__compass'
